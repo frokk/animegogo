@@ -116,6 +116,8 @@
 			<a class="episodeLink" on:click={ function() { PlayVideo(episode.episodeId); } }>Ep: {episode.episodeNum}</a>
 		{/each}
 	</div>
+{:else}
+	<p>Loading Anime Details...</p>
 {/if}
 
 
