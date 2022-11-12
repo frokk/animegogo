@@ -27,7 +27,7 @@
 {#if searchResults.length > 0}
 	<div>
 	{#each searchResults as item}
-		<a href={`/#/anime/${item.animeId}`} class="searchItem">
+		<a href={`${location.pathname}#/anime/${item.animeId}`} class="searchItem">
 			<img class="searchItemImage" src={item.animeImg}>
 			<p class="searchItemTitle">{item.animeTitle}</p>
 		</a>
