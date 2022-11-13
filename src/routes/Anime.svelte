@@ -33,16 +33,8 @@
 						layoutControls: {
 							title: "",
 							contextMenu: false,
-							controlBar: {
-								autoHideTimeout: 3,
-								animated: true,
-								autoHide: true
-							},
-							htmlOnPauseBlock: {
-								html: null,
-								height: null,
-								width: null
-							},
+							controlBar: { autoHideTimeout: 3, animated: true, autoHide: true },
+							htmlOnPauseBlock: { html: null, height: null, width: null },
 							autoPlay: false,
 							mute: false,
 							allowTheatre: true,
@@ -130,6 +122,10 @@
 
 
 <style>
+	video {
+		max-width: 80vw;
+	}
+
 	.episodeHolder {
 		text-align: center;
 		margin: 1em auto;
