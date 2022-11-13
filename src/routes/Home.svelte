@@ -2,29 +2,42 @@
 	let IsLoading = false;
 	let searchQuery = "";
 	let searchResults = [];
+	let errorText = "";
 
 	async function _SearchQuery(e) {
-		if (searchQuery) {
-			IsLoading = true;
-			// Replace Multiple Space in the query with "-"
-			const url = `https://gogoanime.consumet.org/search?keyw=${searchQuery.replace(/\s+/g, "-")}` 
-			const response = await fetch(url, { cache: "reload" });
-			const json = await response.json();
-			searchResults = json;
+		try {
+			errorText = "";
+			if (searchQuery != null && searchQuery != "") {
+				IsLoading = true;
+				// Replace Multiple Space in the query with "-"
+				const url = `https://gogoanime.consumet.org/search?keyw=${searchQuery.replace(/\s+/g, "-")}` 
+				const response = await fetch(url, { cache: "reload" });
+				const json = await response.json();
+				searchResults = json.length > 0 ? json : null;
+				errorText = searchResults == null ? "No Result Found!" : "";
+				IsLoading = false;
+			} else {
+				errorText = "No Query Entered!";
+			}
+		} catch (err) {
 			IsLoading = false;
+			errorText = err;
 		}
+		if (errorText && errorText != "") searchResults = null;
 	}
 </script>
 
 <h1>AnimeGoGo</h1>
-<input bind:value={searchQuery} on:keypress={function(e) { if (e.code == "Enter") { _SearchQuery(e) } }} placeholder="Search For Anime..." type="text" name="search-box">
+<input bind:value={searchQuery} on:keypress={function(e) { if (e.keyCode == 13) { _SearchQuery(e) } }} placeholder="Search For Anime..." type="text" name="search-box">
 <button on:click={_SearchQuery}>Search 🔍</button>
 
 {#if IsLoading == true}
 	<p>Loading...</p>
 {/if}
 
-{#if searchResults.length > 0}
+{#if searchResults == null}
+	<p>{errorText}</p>
+{:else if searchResults.length > 0}
 	<div>
 	{#each searchResults as item}
 		<a href={`${location.pathname}#/anime/${item.animeId}`} class="searchItem">

@@ -10,64 +10,71 @@
 	let vPlayerContainer = null;
 	let videoPlayerElement = null;
 	let fluidPlayerObj = null;
+	let currentEpisode = "";
 
 	let detail = null;
 
 	function PlayVideo(id) {
 		IsPlayerLoading = true;
 
-		function CreatePlayer(json) {
-			if (fluidPlayerObj) fluidPlayerObj.destroy();
-			vPlayerContainer.innerHTML = "";
+		try {
+			function CreatePlayer(json) {
+				if (fluidPlayerObj) fluidPlayerObj.destroy();
+				vPlayerContainer.innerHTML = "";
 
-			videoPlayerElement = document.createElement("video");
-			videoPlayerElement.preload = "none";
-			videoPlayerElement.setAttribute("controls", "");
-			vPlayerContainer.appendChild(videoPlayerElement);
-			videoPlayerElement.innerHTML = `<source src="${json.sources[0].file}" type="application/x-mpegURL" />`
+				videoPlayerElement = document.createElement("video");
+				videoPlayerElement.preload = "none";
+				videoPlayerElement.setAttribute("controls", "");
+				vPlayerContainer.appendChild(videoPlayerElement);
+				videoPlayerElement.innerHTML = `<source src="${json.sources[0].file}" type="application/x-mpegURL" />`
 
-		    fluidPlayerObj = fluidPlayer(
-		        videoPlayerElement, {
-					layoutControls: {
-						title: id.replace(/\-/g, ' '),
-						contextMenu: false,
-						controlBar: {
-							autoHideTimeout: 3,
-							animated: true,
-							autoHide: true
-						},
-						htmlOnPauseBlock: {
-							html: null,
-							height: null,
-							width: null
-						},
-						autoPlay: false,
-						mute: false,
-						allowTheatre: true,
-						playPauseAnimation: true,
-						playbackRateEnabled: true,
-						allowDownload: false,
-						playButtonShowing: true,
-						fillToContainer: true
-					}
-			});
-		}
+			    fluidPlayerObj = fluidPlayer(
+			        videoPlayerElement, {
+						layoutControls: {
+							title: "",
+							contextMenu: false,
+							controlBar: {
+								autoHideTimeout: 3,
+								animated: true,
+								autoHide: true
+							},
+							htmlOnPauseBlock: {
+								html: null,
+								height: null,
+								width: null
+							},
+							autoPlay: false,
+							mute: false,
+							allowTheatre: true,
+							playPauseAnimation: true,
+							playbackRateEnabled: true,
+							allowDownload: false,
+							playButtonShowing: true,
+							fillToContainer: true
+						}
+				});
+				currentEpisode = id;
+			}
 
-		let cachedJson = localStorage.getItem(`${params.id}__${id}`);
-		if (cachedJson) cachedJson = JSON.parse(cachedJson);
-		if (!cachedJson || TimeDifference(new Date().getTime(), cachedJson.timestamp) >= 1) {
-			console.log("No Watch Cache Found!");
-			fetch(`https://gogoanime.consumet.org/vidcdn/watch/${id}`)
-				.then(async function(response) {
-					const json = await response.json();
-					json.timestamp = new Date().getTime();
-					localStorage.setItem(`${params.id}__${id}`, JSON.stringify(json));
-					CreatePlayer(json);
-					IsPlayerLoading = false;
-				})
-		} else {
-			console.log("Watch Cache Found!");
-			CreatePlayer(cachedJson);
+			let cachedJson = localStorage.getItem(`${params.id}__${id}`);
+			if (cachedJson) cachedJson = JSON.parse(cachedJson);
+			if (!cachedJson || TimeDifference(new Date().getTime(), cachedJson.timestamp) >= 1) {
+				console.log("No Watch Cache Found!");
+				fetch(`https://gogoanime.consumet.org/vidcdn/watch/${id}`)
+					.then(async function(response) {
+						const json = await response.json();
+						json.timestamp = new Date().getTime();
+						localStorage.setItem(`${params.id}__${id}`, JSON.stringify(json));
+						CreatePlayer(json);
+						IsPlayerLoading = false;
+					})
+			} else {
+				console.log("Watch Cache Found!");
+				CreatePlayer(cachedJson);
+				IsPlayerLoading = false;
+			}
+		} catch (err) {
+			console.error(err);
 			IsPlayerLoading = false;
 		}
 	}
@@ -109,6 +116,7 @@
 	<p>Loading Video Player...</p>
 {/if}
 
+	<p>Currently Playing: {currentEpisode.replace(/\-/g, ' ')}</p>
 	<div bind:this={vPlayerContainer}></div>
 	<div class="episodeHolder">
 		<h3>Episodes</h3>
@@ -129,6 +137,7 @@
 	}
 
 	.episodeLink {
+		user-select: none;
 		display: inline-block;
 		border-radius: 8px;
 		border: 1px solid transparent;
