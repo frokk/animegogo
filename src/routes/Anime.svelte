@@ -99,16 +99,23 @@
 </script>
 
 {#if detail != null}
-	<img src={detail.animeImg}><br>
-	<h1>{detail.animeTitle}</h1>
-	<p>Released On: {detail.releasedDate}</p>
-	<p>{detail.synopsis}</p>
+	<div style="float: left; margin-right: 2em;">
+		<img src={detail.animeImg}><br>
+	</div>
+	<div style="text-align: left;">
+		<h1>{detail.animeTitle}</h1>
+		<p>Released On: {detail.releasedDate}</p>
+		<p>{detail.synopsis}</p>
+	</div>
 
 {#if IsPlayerLoading == true}
 	<p>Loading Video Player...</p>
 {/if}
 
-	<p>Currently Playing: {currentEpisode.replace(/\-/g, ' ')}</p>
+{#if IsPlayerLoading != true && currentEpisode && currentEpisode != ""}
+	<p style="text-align: left !important;">{currentEpisode.replace(/\-/g, ' ')}</p>
+{/if}
+
 	<div bind:this={vPlayerContainer}></div>
 	<div class="episodeHolder">
 		<h3>Episodes</h3>
@@ -150,5 +157,11 @@
 	.episodeLink:hover {
 		outline: none;
 		border-color: #646cff;
+	}
+
+	.episodeLink.currentEp {
+		color: #FFF;
+		outline: none;
+		border: 1px solid #ffed64 !important;
 	}
 </style>
