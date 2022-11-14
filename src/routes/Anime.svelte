@@ -107,7 +107,7 @@
 		<p>Released On: {detail.releasedDate}</p>
 		<p>{detail.synopsis}</p>
 	</div>
-	<div style="clear: left;"></div>
+	<div style="clear: left !important;"></div>
 
 {#if IsPlayerLoading == true}
 	<p>Loading Video Player...</p>
