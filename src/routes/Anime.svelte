@@ -114,7 +114,7 @@
 {/if}
 
 {#if IsPlayerLoading != true && currentEpisode && currentEpisode != ""}
-	<p style="text-align: left !important;">Current Watching: {currentEpisode.replace(/\-/g, ' ')}</p>
+	<p style="text-align: left !important;">Currently Watching: {currentEpisode.replace(/\-/g, ' ')}</p>
 {/if}
 
 	<div bind:this={vPlayerContainer}></div>
