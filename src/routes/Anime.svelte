@@ -107,13 +107,14 @@
 		<p>Released On: {detail.releasedDate}</p>
 		<p>{detail.synopsis}</p>
 	</div>
+	<div style="clear: left;"></div>
 
 {#if IsPlayerLoading == true}
 	<p>Loading Video Player...</p>
 {/if}
 
 {#if IsPlayerLoading != true && currentEpisode && currentEpisode != ""}
-	<p style="text-align: left !important;">{currentEpisode.replace(/\-/g, ' ')}</p>
+	<p style="text-align: left !important;">Current Watching: {currentEpisode.replace(/\-/g, ' ')}</p>
 {/if}
 
 	<div bind:this={vPlayerContainer}></div>
