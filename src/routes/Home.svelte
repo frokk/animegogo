@@ -27,6 +27,7 @@
 	}
 </script>
 
+<p><small>⚠️ please use <a href="https://zoro.to/">zoro.to</a> incase the player isn't working!</small></p>
 <h1>AnimeGoGo</h1>
 <input bind:value={searchQuery} on:keypress={function(e) { if (e.keyCode == 13) { _SearchQuery(e) } }} placeholder="Search For Anime..." type="text" name="search-box">
 <button on:click={_SearchQuery}>Search 🔍</button>
@@ -73,3 +74,4 @@
 		display: block;
 	}
 </style>
+
